@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Người Dùng</title>
+</head>
+<body>
+<h1>Danh Sách Người Dùng</h1>
+
+<a href="/admin/users/add">Thêm Người Dùng</a>
+<br><br>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Tên đăng nhập</th>
+        <th>Email</th>
+        <th>Vai trò</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.email}"></td>
+        <td>
+                <span th:each="role, iterStat : ${user.roles}">
+                    <span th:text="${role.name}"></span>
+                    <!-- Thêm dấu phẩy nếu không phải phần tử cuối cùng -->
+                    <span th:if="${!iterStat.last}">, </span>
+                </span>
+        </td>
+        <td>
+            <a th:href="@{/admin/users/edit/{id}(id=${user.id})}">Sửa</a>
+            <a th:href="@{/admin/users/delete/{id}(id=${user.id})}"
+               onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này không?');">Xóa</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Dịch Vụ</title>
+</head>
+<body>
+<h1>Danh Sách Dịch Vụ</h1>
+
+<a href="/admin/services/add">Thêm Dịch Vụ</a>
+<br><br>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Tên Dịch Vụ</th>
+        <th>Mô Tả</th>
+        <th>Giá</th>
+        <th>Hành Động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="service : ${services}">
+        <td th:text="${service.name}"></td>
+        <td th:text="${service.description}"></td>
+        <td th:text="${service.price}"></td>
+        <td>
+            <a th:href="@{/admin/services/edit/{id}(id=${service.id})}">Sửa</a>
+            <a th:href="@{/admin/services/delete/{id}(id=${service.id})}">Xóa</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
