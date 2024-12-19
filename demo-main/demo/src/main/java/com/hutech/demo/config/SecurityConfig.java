@@ -49,22 +49,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(@NotNull HttpSecurity http) throws Exception {
         return http
-
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for now
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
-                        .requestMatchers("/css/**", "/js/**", "/", "/oauth/**", "/register", "/login", "/error", "/index", "/about",
-                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html")
-                        .permitAll()
-
-                        // Admin-only endpoints
-                        .requestMatchers("/admin/**")
-                        .hasAuthority("ADMIN")
-
-                        // Customer-only endpoints
-                        .requestMatchers("/booking", "/service")
-                        .hasAuthority("CUSTOMER")
-
-                        // Authenticated access
+                        // Allow public access to Swagger
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                        // Allow public access to your API endpoints
+                        .requestMatchers("/api/bookings/**").permitAll()
+                        // Restrict other requests
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
@@ -85,12 +76,10 @@ public class SecurityConfig {
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedPage("/403")
                 )
-                .sessionManagement(sessionManagement -> sessionManagement
-                        .maximumSessions(1)
-                        .expiredUrl("/login")
-                )
                 .build();
     }
+
+
 
     @Bean
     public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
